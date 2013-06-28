@@ -1,3 +1,8 @@
+Particles = function(){
+
+}
+
+
 APlayer = function( containerID, playerID ){
   var container = $('#'+containerID)
   var player = $('#'+playerID)
@@ -31,9 +36,31 @@ APlayer = function( containerID, playerID ){
     }
   }
 
+  function animatePlayer(animationName){
+    player.addClass('animated ' + animationName)
+    setTimeout(function(){
+        player.removeClass('animated '+animationName)
+    }, 1000) 
+
+  }
 
   player.mousedown(function(){
     self.stop()
+    animatePlayer('wiggle')
+
+    /*player.css({borderWidth:0, borderColor: '#66cc00' })
+    player.animate({borderWidth:50, borderColor:"#EEE", marginTop: '-=50', marginLeft:'-=50'}, 200,function(){
+      player.css({borderWidth:0, marginTop: '+=50', marginLeft: '+=50'})
+      setTimeout(function(){
+        player.addClass('animated wiggle')
+        setTimeout(function(){
+          player.removeClass('animated wiggle')
+        }, 2000)  
+      }, 200)
+      
+    })*/
+
+
   })
 
   player.mouseup(function(){
@@ -79,8 +106,14 @@ APlayer = function( containerID, playerID ){
     top += velocity.top
     left += velocity.left
 
-    if( top + player.height() > container.height() || top < 0 ) velocity.top *= -1
-    if( left + player.width() > container.width() || left < 0 ) velocity.left *= -1
+    if( top + player.height() > container.height() || top < 0 ){
+      velocity.top *= -1
+    }
+    if( left + player.width() > container.width() || left < 0 ){
+      animatePlayer('wiggleX')
+      if( left < 0 ) velocity.left = Math.abs(velocity.left)
+      else velocity.left = -Math.abs(velocity.left)
+    }
 
 
     // If we get close to the destination, switch it up
